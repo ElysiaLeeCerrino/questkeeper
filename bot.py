@@ -8,7 +8,7 @@ import database as db
 import calendar_sync
 
 load_dotenv()
-TOKEN = os.getenv("MTU1MzUwMTc1MjcyMzExMTk2Nw.G81uIZ.TPo2vshq04i8UsRORDd3YHKM55t-oKjmCcqbPM")
+TOKEN = os.getenv("")
 
 intents = discord.Intents.default()
 intents.message_content = True
