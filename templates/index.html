@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&D Attendance – QuestKeeper</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>D&D Session Attendance</h1>
+  </header>
+
+  <main>
+    {% if latest %}
+    <section class="card">
+      <h2>{{ latest.title }}</h2>
+      <p class="when">{{ latest.start_time }}</p>
+      <p>{{ latest.description or "No description" }}</p>
+
+      <div class="attendance-grid">
+        <div>
+          <h3>✅ Attending</h3>
+          <ul>
+            {% for a in attendance if a.status == 'attending' %}
+              <li>{{ a.username }}</li>
+            {% else %}
+              <li class="empty">—</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div>
+          <h3>❓ Maybe</h3>
+          <ul>
+            {% for a in attendance if a.status == 'maybe' %}
+              <li>{{ a.username }}</li>
+            {% else %}
+              <li class="empty">—</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div>
+          <h3>❌ Not Attending</h3>
+          <ul>
+            {% for a in attendance if a.status == 'not_attending' %}
+              <li>{{ a.username }}</li>
+            {% else %}
+              <li class="empty">—</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </section>
+    {% else %}
+    <p>No sessions yet. Create one with <code>/session</code> in Discord.</p>
+    {% endif %}
+
+    <section class="card">
+      <h2>Past Sessions</h2>
+      <ul class="session-list">
+        {% for s in sessions %}
+          <li>
+            <strong>{{ s.title }}</strong> — {{ s.start_time }}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
