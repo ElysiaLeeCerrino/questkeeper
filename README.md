@@ -11,11 +11,46 @@ Discord bot + web dashboard that tracks D&D session attendance and syncs events 
 - Google Calendar event creation
 - Simple web dashboard
 
-## Setup (Windows)
+---
 
-1. Make sure Python is installed from [python.org](https://www.python.org) (tick **Add to PATH**).
+## Hosting on Render (recommended for 24/7)
 
-2. Clone this repository and open a terminal in the folder:
+### 1. Create a Background Worker
+
+1. Go to [Render Dashboard](https://dashboard.render.com)
+2. **New +** → **Background Worker**
+3. Connect the GitHub repo: `ElysiaLeeCerrino/questkeeper`
+4. Settings:
+
+| Setting | Value |
+|---------|-------|
+| **Name** | `questkeeper-bot` |
+| **Runtime** | Python 3 |
+| **Build Command** | `pip install -r requirements.txt` |
+| **Start Command** | `python bot.py` |
+
+### 2. Environment Variables
+
+In the Render service → **Environment**, add these:
+
+| Key | Value |
+|-----|-------|
+| `DISCORD_TOKEN` | Your Discord bot token |
+| `GOOGLE_CALENDAR_ID` | `33c0b8312c6bfa3cd8039034257d42b4a41740607c34ef8d011e2593120f42fa@group.calendar.google.com` |
+| `GOOGLE_CREDENTIALS_JSON` | Paste the **entire contents** of your `service-account.json` file (as one long string) |
+| `FLASK_SECRET` | Any random string |
+
+> **How to get `GOOGLE_CREDENTIALS_JSON`:**  
+> Open your `service-account.json` in a text editor, copy **everything**, and paste it as the value of the environment variable.
+
+### 3. Deploy
+
+Click **Create Background Worker** (or **Manual Deploy** if it already exists).  
+When the logs show `Logged in as QuestKeeper#...` the bot is online.
+
+---
+
+## Local setup (Windows)
 
 ```powershell
 git clone https://github.com/ElysiaLeeCerrino/questkeeper.git
@@ -25,7 +60,7 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-3. Create a `.env` file (copy from the example below) and fill in your values:
+Create a `.env` file:
 
 ```env
 DISCORD_TOKEN=your_bot_token_here
@@ -34,21 +69,13 @@ GOOGLE_CALENDAR_ID=your_calendar_id@group.calendar.google.com
 FLASK_SECRET=any-random-string
 ```
 
-4. Place your Google service-account JSON file in the project folder as `service-account.json`.
-
-5. Run the bot:
+Then run:
 
 ```powershell
 python bot.py
 ```
 
-6. (Optional) Run the web dashboard in a second terminal:
-
-```powershell
-python web.py
-```
-
-Then open http://localhost:8080
+---
 
 ## Discord command
 
@@ -59,7 +86,9 @@ Then open http://localhost:8080
 - **date** → `DD/MM/YYYY`
 - **time** → `HH:MM` (24-hour)
 
+---
+
 ## Important security notes
 
-- Never commit the `.env` or `service-account.json` files (they are already in `.gitignore`).
+- Never commit `.env` or `service-account.json` (they are in `.gitignore`).
 - If you ever shared your Discord bot token, reset it in the [Discord Developer Portal](https://discord.com/developers/applications).
