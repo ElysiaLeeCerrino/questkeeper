@@ -8,7 +8,7 @@ import database as db
 import calendar_sync
 
 load_dotenv()
-TOKEN = os.getenv("")
+TOKEN = os.getenv("DISCORD_TOKEN")
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -108,14 +108,16 @@ async def create_session(
     time: str,
     description: str = ""
 ):
+    # Reply to Discord immediately so it never times out
+    await interaction.response.defer()
+
     try:
         # Parse UK date (DD/MM/YYYY) + time (HH:MM)
         start = datetime.strptime(f"{date} {time}", "%d/%m/%Y %H:%M")
         start_iso = start.isoformat()
-        # Nice UK display: 05/10/2026 at 19:00
         display_when = start.strftime("%d/%m/%Y at %H:%M")
     except ValueError:
-        await interaction.response.send_message(
+        await interaction.followup.send(
             "Invalid format.\n"
             "• Date must be `DD/MM/YYYY` (e.g. `05/10/2026`)\n"
             "• Time must be `HH:MM` in 24-hour format (e.g. `19:00`)",
@@ -125,7 +127,7 @@ async def create_session(
 
     session_id = db.create_session(title, description, start_iso)
 
-    # Create Google Calendar event
+    # Create Google Calendar event (can be slow – now safe because we already deferred)
     try:
         event_id = calendar_sync.create_event(title, description, start_iso)
         db.update_google_event_id(session_id, event_id)
@@ -144,7 +146,7 @@ async def create_session(
     embed.set_footer(text=f"Session ID: {session_id}")
 
     view = AttendanceView(session_id)
-    await interaction.response.send_message(embed=embed, view=view)
+    await interaction.followup.send(embed=embed, view=view)
 
 @client.event
 async def on_ready():
