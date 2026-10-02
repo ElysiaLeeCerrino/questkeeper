@@ -1,0 +1,84 @@
+:root {
+  --bg: #1a1b26;
+  --card: #24283b;
+  --text: #c0caf5;
+  --accent: #7aa2f7;
+  --muted: #565f89;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+header {
+  margin-bottom: 2rem;
+}
+
+h1 {
+  color: var(--accent);
+  font-size: 1.8rem;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.when {
+  color: var(--muted);
+  margin: 0.5rem 0 1rem;
+}
+
+.attendance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.attendance-grid h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.attendance-grid ul {
+  list-style: none;
+}
+
+.attendance-grid li {
+  padding: 0.25rem 0;
+}
+
+.empty {
+  color: var(--muted);
+}
+
+.session-list {
+  list-style: none;
+}
+
+.session-list li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--muted);
+}
+
+code {
+  background: #1a1b26;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
